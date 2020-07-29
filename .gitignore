@@ -9,4 +9,4 @@
 .idea/*
 *.iml
 *.xml
-.out/*
+/out/*

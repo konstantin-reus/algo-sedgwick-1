@@ -1,7 +1,9 @@
-package com.reus.algorithms1.percolation; /******************************************************************************
+package com.reus.algorithms1.percolation;
+
+/******************************************************************************
  *  Compilation:  javac com.reus.algorithms1.percolation.PercolationVisualizer.java
  *  Execution:    java com.reus.algorithms1.percolation.PercolationVisualizer input.txt
- *  Dependencies: com.reus.algorithms1.percolation.Percolation.java
+ *  Dependencies: com.reus.algorithms1.percolation.PercolationOnArray.java
  *
  *  This program takes the name of a file as a command-line argument.
  *  From that file, it
@@ -15,8 +17,6 @@ package com.reus.algorithms1.percolation; /*************************************
  *  with with site (1, 1) in the upper left-hand corner.
  *
  ******************************************************************************/
-
-import com.reus.algorithms1.percolation.Percolation;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 
