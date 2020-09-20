@@ -4,8 +4,6 @@ import java.util.Arrays;
 
 public class FastCollinearPoints {
     private static final int MIN_REPEATED_SLOTS = 3;
-    private final Point[] startSegmentPoints;
-    private final Point[] endSegmentPoints;
     private int counter = 0;
     private LineSegment[] lineSegments;
 
@@ -16,8 +14,6 @@ public class FastCollinearPoints {
         Point[] clonedPoints = Arrays.copyOf(points, points.length);
         checkPoints(clonedPoints);
         lineSegments = new LineSegment[clonedPoints.length * clonedPoints.length];
-        startSegmentPoints = new Point[lineSegments.length];
-        endSegmentPoints = new Point[lineSegments.length];
         Arrays.sort(clonedPoints, Point::compareTo);
         if (clonedPoints.length < MIN_REPEATED_SLOTS) {
             return;
@@ -37,14 +33,14 @@ public class FastCollinearPoints {
                         Point[] foundSegment = new Point[repeatedSlopes + 1];
                         foundSegment[0] = current;
                         System.arraycopy(sortedBySlopeToCurrent, sortedBySlopeToCurrent.length - repeatedSlopes, foundSegment, 1, repeatedSlopes);
-                        addLineSegment(foundSegment);
+                        addLineSegment(current, foundSegment);
                     }
                 } else {
                     if (repeatedSlopes >= MIN_REPEATED_SLOTS) {
                         Point[] foundSegment = new Point[repeatedSlopes + 1];
                         foundSegment[0] = current;
                         System.arraycopy(sortedBySlopeToCurrent, j - repeatedSlopes, foundSegment, 1, repeatedSlopes);
-                        addLineSegment(foundSegment);
+                        addLineSegment(current, foundSegment);
                     }
                     curSlope = sortedBySlopeToCurrent[j].slopeTo(current);
                     repeatedSlopes = 1;
@@ -75,24 +71,12 @@ public class FastCollinearPoints {
         }
     }
 
-    private void addLineSegment(Point[] foundSegment) {
+    private void addLineSegment(Point current, Point[] foundSegment) {
         Arrays.sort(foundSegment, Point::compareTo);
-        LineSegment newLineSegment = new LineSegment(foundSegment[0], foundSegment[foundSegment.length - 1]);
-        for (int i = 0; i < lineSegments.length; i++) {
-            Point existingStart = startSegmentPoints[i];
-            Point existingEnd = endSegmentPoints[i];
-            if (lineSegments[i] == null && existingStart == null && existingEnd == null) {
-                lineSegments[i] = newLineSegment;
-                startSegmentPoints[i] = foundSegment[0];
-                endSegmentPoints[i] = foundSegment[foundSegment.length - 1];
-                counter++;
-                return;
-            } else if (startSegmentPoints[i] != null && endSegmentPoints[i] != null
-                    && foundSegment[0].compareTo(startSegmentPoints[i]) == 0
-                    && endSegmentPoints[i].compareTo(foundSegment[foundSegment.length - 1]) == 0) {
-                return;
-            }
+        if (current != foundSegment[0]) {
+            return;
         }
+        lineSegments[counter++] = new LineSegment(foundSegment[0], foundSegment[foundSegment.length - 1]);
     }
 
     public int numberOfSegments() {

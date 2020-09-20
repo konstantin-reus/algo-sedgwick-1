@@ -31,11 +31,6 @@ public class Point implements Comparable<Point> {
         this.y = y;
     }
 
-    public static void main(String[] args) {
-        Point[] points = new Point[]{new Point(12542, 18780), null};
-        FastCollinearPoints bp = new FastCollinearPoints(points);
-    }
-
     /**
      * Draws this point to standard draw.
      */
