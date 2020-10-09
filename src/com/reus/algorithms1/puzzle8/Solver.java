@@ -9,8 +9,8 @@ import java.util.List;
 public class Solver {
     private final Node finalNode;
     private static final Comparator<Node> minQueueComparator = (o1, o2) -> {
-        int distance1 = o1.getNumberOfMovesToReach() + o1.getBoard().hamming();
-        int distance2 = o2.getNumberOfMovesToReach() + o2.getBoard().hamming();
+        int distance1 = o1.getNumberOfMovesToReach() + o1.getBoard().manhattan();
+        int distance2 = o2.getNumberOfMovesToReach() + o2.getBoard().manhattan();
         if (distance1 < distance2) {
             return -1;
         } else if (distance1 == distance2) {
