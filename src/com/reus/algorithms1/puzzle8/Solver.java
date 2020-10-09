@@ -8,17 +8,6 @@ import java.util.List;
 
 public class Solver {
     private final Node finalNode;
-    private static final Comparator<Node> minQueueComparator = (o1, o2) -> {
-        int distance1 = o1.getNumberOfMovesToReach() + o1.getBoard().manhattan();
-        int distance2 = o2.getNumberOfMovesToReach() + o2.getBoard().manhattan();
-        if (distance1 < distance2) {
-            return -1;
-        } else if (distance1 == distance2) {
-            return 0;
-        } else {
-            return 1;
-        }
-    };
     private boolean isSolveable = true;
 
     // find a solution to the initial board (using the A* algorithm)
@@ -27,6 +16,17 @@ public class Solver {
             throw new IllegalArgumentException();
         }
         Board twin = initial.twin();
+        Comparator<Node> minQueueComparator = (o1, o2) -> {
+            int distance1 = o1.getNumberOfMovesToReach() + o1.getManhattan();
+            int distance2 = o2.getNumberOfMovesToReach() + o2.getManhattan();
+            if (distance1 < distance2) {
+                return -1;
+            } else if (distance1 == distance2) {
+                return 0;
+            } else {
+                return 1;
+            }
+        };
 
         MinPQ<Node> queue = new MinPQ<>(minQueueComparator);
         MinPQ<Node> queueTwin = new MinPQ<>(minQueueComparator);
@@ -97,7 +97,7 @@ public class Solver {
         }
         Node current = finalNode;
         List<Board> solutionBoards = new ArrayList<>(current.getNumberOfMovesToReach());
-        for (int i = 0; i < finalNode.getNumberOfMovesToReach(); i++) {
+        for (int i = 0; i < finalNode.getNumberOfMovesToReach() + 1; i++) {
             solutionBoards.add(0, current.getBoard());
             current = current.getPreviousNode();
         }
@@ -105,11 +105,13 @@ public class Solver {
     }
 
     private static class Node {
+        private final int manhattan;
         private final Board board;
         private final int numberOfMovesToReach;
         private final Node previousNode;
 
         public Node(Board board, int numberOfMovesToReach, Node previousNode) {
+            this.manhattan = board.manhattan();
             this.board = board;
             this.numberOfMovesToReach = numberOfMovesToReach;
             this.previousNode = previousNode;
@@ -125,6 +127,10 @@ public class Solver {
 
         public Node getPreviousNode() {
             return previousNode;
+        }
+
+        public int getManhattan() {
+            return manhattan;
         }
     }
 }

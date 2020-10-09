@@ -8,12 +8,34 @@ import java.util.List;
 public class Board {
     private final int[][] tiles;
     private final int n;
+    private int twinIFirst = -1;
+    private int twinJFirst = -1;
+    private int twinISecond = -1;
+    private int twinJSecond = -1;
 
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
     public Board(int[][] tiles) {
-        this.tiles = tiles;
+        this.tiles = new int[tiles.length][tiles[0].length];
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles.length; j++) {
+                this.tiles[i][j] = tiles[i][j];
+            }
+        }
         n = tiles[0].length;
+
+        int currentTileFirst = -1;
+        while (currentTileFirst == -1 || currentTileFirst == 0) {
+            twinIFirst = StdRandom.uniform(tiles.length);
+            twinJFirst = StdRandom.uniform(tiles[twinIFirst].length);
+            currentTileFirst = tiles[twinIFirst][twinJFirst];
+        }
+        int currentTileSecond = -1;
+        while (currentTileSecond == -1 || currentTileSecond == 0 || currentTileSecond == currentTileFirst) {
+            twinISecond = StdRandom.uniform(tiles.length);
+            twinJSecond = StdRandom.uniform(tiles[twinISecond].length);
+            currentTileSecond = tiles[twinISecond][twinJSecond];
+        }
     }
 
     private static Board move(int[][] tiles, Pair moveFrom, Pair moveTo, boolean isZeroSwitch) {
@@ -65,10 +87,9 @@ public class Board {
         int wrong = 0;
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
-                if (i == n - 1 && j == n - 1) {
-                    return tiles[i][j] == 0
-                            ? wrong
-                            : wrong + 1;
+                if (tiles[i][j] == 0) {
+                    counter++;
+                    continue;
                 }
                 if (tiles[i][j] != counter++) {
                     wrong++;
@@ -83,6 +104,9 @@ public class Board {
         int totalManhattan = 0;
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
+                if (tiles[i][j] == 0) {
+                    continue;
+                }
                 Pair expectedCoordinates = getExpectedCoordinates(tiles[i][j]);
                 int diffI = Math.abs(i - expectedCoordinates.getI());
                 int diffJ = Math.abs(j - expectedCoordinates.getJ());
@@ -96,7 +120,7 @@ public class Board {
         if (i == 0) {
             return new Pair(n - 1, n - 1);
         }
-        int targetI = i / n;
+        int targetI = (i - 1) / n;
         int targetJ = (i - 1) % n;
         return new Pair(targetI, targetJ);
     }
@@ -171,13 +195,7 @@ public class Board {
 
     // a board that is obtained by exchanging any pair of tiles
     public Board twin() {
-        int randomI = StdRandom.uniform(tiles.length);
-        int randomJ = StdRandom.uniform(tiles[randomI].length);
-        if (randomJ - 1 >= 0) { //move left -> right (to 0)
-            return move(tiles, new Pair(randomI, randomJ - 1), new Pair(randomI, randomJ), false);
-        } else {
-            return move(tiles, new Pair(randomI, randomJ + 1), new Pair(randomI, randomJ), false);
-        }
+        return move(tiles, new Pair(twinIFirst, twinJFirst), new Pair(twinISecond, twinJSecond), false);
     }
 
     private static class Pair {

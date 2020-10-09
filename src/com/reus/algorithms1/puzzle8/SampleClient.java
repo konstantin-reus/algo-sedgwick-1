@@ -5,6 +5,13 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class SampleClient {
     public static void main(String[] args) {
+        int[][] tiles1 = {
+                {1, 0},
+                {3, 2}
+        };
+        Board b = new Board(tiles1);
+        Solver s = new Solver(b);
+        s.solution();
         // create initial board from file
         In in = new In(args[0]);
         int n = in.readInt();
