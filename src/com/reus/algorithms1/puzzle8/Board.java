@@ -1,5 +1,7 @@
 package com.reus.algorithms1.puzzle8;
 
+import edu.princeton.cs.algs4.StdRandom;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,15 +16,16 @@ public class Board {
         n = tiles[0].length;
     }
 
-    private static Board move(int[][] tiles, Pair moveFrom, Pair moveTo) {
-        int zeroI = moveTo.getI();
-        int zeroJ = moveTo.getJ();
+    private static Board move(int[][] tiles, Pair moveFrom, Pair moveTo, boolean isZeroSwitch) {
         int[][] newTiles = new int[tiles.length][tiles[0].length];
+        int moved = isZeroSwitch
+                ? 0
+                : tiles[moveTo.getI()][moveTo.getJ()];
 
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles.length; j++) {
                 if (i == moveFrom.getI() && j == moveFrom.getJ()) {
-                    newTiles[i][j] = 0;
+                    newTiles[i][j] = moved;
                 } else if (i == moveTo.getI() && j == moveTo.getJ()) {
                     newTiles[i][j] = tiles[moveFrom.getI()][moveFrom.getJ()];
                 } else {
@@ -31,11 +34,6 @@ public class Board {
             }
         }
         return new Board(newTiles);
-    }
-
-    // unit testing (not graded)
-    public static void main(String[] args) {
-
     }
 
     // string representation of this board
@@ -151,19 +149,19 @@ public class Board {
                     continue;
                 }
                 if (i - 1 >= 0) { //move up -> down (to 0)
-                    Board upBoard = move(tiles, new Pair(i - 1, j), new Pair(i, j));
+                    Board upBoard = move(tiles, new Pair(i - 1, j), new Pair(i, j), true);
                     result.add(upBoard);
                 }
                 if (i + 1 < tiles.length) { //move down -> up (to 0)
-                    Board downBoard = move(tiles, new Pair(i + 1, j), new Pair(i, j));
+                    Board downBoard = move(tiles, new Pair(i + 1, j), new Pair(i, j), true);
                     result.add(downBoard);
                 }
                 if (j - 1 >= 0) { //move left -> right (to 0)
-                    Board leftBoard = move(tiles, new Pair(i, j - 1), new Pair(i, j));
+                    Board leftBoard = move(tiles, new Pair(i, j - 1), new Pair(i, j), true);
                     result.add(leftBoard);
                 }
                 if (j + 1 < tiles[i].length) { //move right -> left (to 0)
-                    Board rightBoard = move(tiles, new Pair(i, j + 1), new Pair(i, j));
+                    Board rightBoard = move(tiles, new Pair(i, j + 1), new Pair(i, j), true);
                     result.add(rightBoard);
                 }
             }
@@ -173,7 +171,13 @@ public class Board {
 
     // a board that is obtained by exchanging any pair of tiles
     public Board twin() {
-        return null;
+        int randomI = StdRandom.uniform(tiles.length);
+        int randomJ = StdRandom.uniform(tiles[randomI].length);
+        if (randomJ - 1 >= 0) { //move left -> right (to 0)
+            return move(tiles, new Pair(randomI, randomJ - 1), new Pair(randomI, randomJ), false);
+        } else {
+            return move(tiles, new Pair(randomI, randomJ + 1), new Pair(randomI, randomJ), false);
+        }
     }
 
     private static class Pair {
