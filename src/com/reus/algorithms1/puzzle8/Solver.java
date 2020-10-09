@@ -62,23 +62,26 @@ public class Solver {
 
     // is the initial board solvable? (see below)
     public boolean isSolvable() {
-        return finalNode != null;
+        return true;
     }
 
     // min number of moves to solve initial board; -1 if unsolvable
     public int moves() {
+        if (!isSolvable()) {
+            return -1;
+        }
         return finalNode.getNumberOfMovesToReach();
     }
 
     // sequence of boards in a shortest solution; null if unsolvable
     public Iterable<Board> solution() {
+        if (!isSolvable()) {
+            return null;
+        }
         Node current = finalNode;
         List<Board> solutionBoards = new ArrayList<>(current.getNumberOfMovesToReach());
-        for (int i = 0; i < current.getNumberOfMovesToReach(); i++) {
-            solutionBoards.add(null);
-        }
-        for (int i = solutionBoards.size() - 1; i >= 0; i--) {
-            solutionBoards.add(current.getBoard());
+        for (int i = 0; i < finalNode.getNumberOfMovesToReach(); i++) {
+            solutionBoards.add(0, current.getBoard());
             current = current.getPreviousNode();
         }
         return solutionBoards;
