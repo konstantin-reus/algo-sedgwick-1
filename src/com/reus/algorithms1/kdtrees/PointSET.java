@@ -8,22 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
+/**
+ * https://coursera.cs.princeton.edu/algs4/assignments/kdtree/specification.php
+ */
 public class PointSET {
     private final TreeSet<Point2D> points = new TreeSet<>();
 
     public PointSET() {
-    }
-
-    public static void main(String[] args) {
-        PointSET p = new PointSET();
-        p.insert(new Point2D(0., 0.));
-        p.insert(new Point2D(0.1, 0.4));
-        p.insert(new Point2D(0.4, 0.3));
-        p.insert(new Point2D(0.6, 0.5));
-        p.insert(new Point2D(0.8, 0.6));
-        p.draw();
-
-
     }
 
     public boolean isEmpty() {
@@ -34,11 +25,19 @@ public class PointSET {
         return points.size();
     }
 
-    public void insert(Point2D p) {
-        if (p == null) {
-            throw new IllegalArgumentException();
-        }
-        points.add(p);
+    public static void main(String[] args) {
+        PointSET p = new PointSET();
+        p.insert(new Point2D(0.5, 0.0));
+        p.insert(new Point2D(1.0, 1.0));
+        p.insert(new Point2D(0.25, 0.0));
+        p.insert(new Point2D(0.5, 1.0));
+        p.insert(new Point2D(0.25, 0.5));
+        p.insert(new Point2D(0.0, 0.0));
+        p.insert(new Point2D(1.0, 1.0));
+        p.insert(new Point2D(1.0, 0.0));
+        p.insert(new Point2D(0.5, 0.0));
+        p.insert(new Point2D(0.75, 0.0));
+        System.out.println(p.nearest(new Point2D(0.5, 0.75)));
     }
 
     public boolean contains(Point2D p) {
@@ -78,15 +77,26 @@ public class PointSET {
         return result;
     }
 
+    public void insert(Point2D p) {
+        if (p == null) {
+            throw new IllegalArgumentException();
+        }
+        if (contains(p)) {
+            return;
+        }
+        points.add(p);
+    }
+
     public Point2D nearest(Point2D p) {
         if (p == null) {
             throw new IllegalArgumentException();
         }
         Point2D nearest = null;
-        double minDistance = Double.MAX_VALUE;
+        double minDistance = Double.POSITIVE_INFINITY;
         for (Point2D point : points) {
-            double curDistance = point.distanceTo(p);
+            double curDistance = point.distanceSquaredTo(p);
             if (curDistance < minDistance) {
+                minDistance = curDistance;
                 nearest = point;
             }
         }
