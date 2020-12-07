@@ -4,6 +4,11 @@ import edu.princeton.cs.algs4.Picture;
 
 import java.util.Arrays;
 
+/**
+ * https://coursera.cs.princeton.edu/algs4/assignments/seam/specification.php
+ *
+ * @author Konstantin Reus
+ */
 public class SeamCarver {
     private double[][] energy;
     private int[][] rgb;

@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * https://coursera.cs.princeton.edu/algs4/assignments/wordnet/specification.php
+ */
 public class WordNet {
     private final Map<String, Set<Integer>> nounToSynsets = new HashMap<>();
     private final Map<Integer, String> synsets = new HashMap<>();
