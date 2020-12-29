@@ -1,5 +1,4 @@
 package com.reus.algorithms2.boggle;
-
 /******************************************************************************
  *  Compilation:  javac BoggleBoard.java
  *  Execution:    java  BoggleBoard
