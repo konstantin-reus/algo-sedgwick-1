@@ -3,6 +3,9 @@ package com.reus.algorithms2.burrows;
 import edu.princeton.cs.algs4.BinaryStdIn;
 import edu.princeton.cs.algs4.BinaryStdOut;
 
+/**
+ * https://coursera.cs.princeton.edu/algs4/assignments/burrows/specification.php
+ */
 public class BurrowsWheeler {
     private static final int R = 256;
 
